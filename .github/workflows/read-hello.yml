@@ -1,14 +1,36 @@
-name: Hello CI
+name: Read Index HTML Content
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]  # triggers workflow on push to main
 
 jobs:
-  say-hello:
-    runs-on: ubuntu-latest
+  read-file:
+    runs-on: self-hosted  # your AWS EC2 runner
+    
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Say Hello
-        run: echo "Hello, GitHub Actions!"
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Display repository contents
+      run: |
+        echo "Repository contents:"
+        ls -la
+        
+    - name: Check if index.html exists
+      run: |
+        if [ -f "index.html" ]; then
+          echo "index.html found!"
+        else
+          echo "index.html not found!"
+          exit 1
+        fi
+        
+    - name: Read and display index.html content
+      run: |
+        echo "===================="
+        echo "INDEX.HTML CONTENT:"
+        echo "===================="
+        cat index.html
+        echo "===================="
+        echo "Content display completed!"
